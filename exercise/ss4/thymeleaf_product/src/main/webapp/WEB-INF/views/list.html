@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Product List</title>
+</head>
+<body>
+
+<h2>Product List</h2>
+
+<form th:action="@{/products/search}" method="get">
+  <input type="text" name="name" placeholder="Search by name">
+  <button type="submit">Search</button>
+</form>
+
+<br>
+
+<a th:href="@{/products/create}">Create new product</a>
+
+<table border="1">
+  <tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Price</th>
+    <th>Description</th>
+    <th>Manufacturer</th>
+    <th>Action</th>
+  </tr>
+
+  <tr th:each="p : ${products}">
+    <td th:text="${p.id}"></td>
+    <td th:text="${p.name}"></td>
+    <td th:text="${p.price}"></td>
+    <td th:text="${p.description}"></td>
+    <td th:text="${p.manufacturer}"></td>
+    <td>
+      <a th:href="@{/products/view/{id}(id=${p.id})}">View</a> |
+      <a th:href="@{/products/edit/{id}(id=${p.id})}">Edit</a> |
+      <a th:href="@{/products/delete/{id}(id=${p.id})}"
+         onclick="return confirm('Are you sure?')">Delete</a>
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>
