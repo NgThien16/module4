@@ -1,0 +1,21 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Document</title>
+    <link rel="stylesheet" th:href="@{/layout/style.css}">
+</head>
+<body>
+<h1>Blogs</h1>
+<a href="blog/add">Add New Blog</a>
+<div class="blog-card" th:each="blog : ${blogList}">
+    <div class="blog-content">
+        <h3 class="blog-title" th:text="${blog.title}"></h3>
+        <p class="blog-desc" th:text="${blog.content}"></p>
+        <a href="blog/detail">detail</a>
+    </div>
+</div>
+<p class="success-msg" th:if="${mess}" th:text="${mess}"></p>
+</body>
+</html>

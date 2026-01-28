@@ -1,0 +1,24 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Document</title>
+  <link rel="stylesheet" th:href="@{/layout/style.css}">
+</head>
+<body>
+<a href="/blog">Back to home</a>
+<div th:each="blog : ${blogList}">
+  <div class="blog-content">
+    <h3 class="blog-title" th:text="${blog.title}"></h3>
+    <p class="blog-desc" th:text="${blog.content}"></p>
+    Create by: <p th:text="${blog.author}"></p>
+    Create at: <p th:text="${blog.publishedDate}"></p>
+  </div>
+  <div>
+    <button>Delete</button>
+    <button>Update</button>
+  </div>
+</div>
+</body>
+</html>
