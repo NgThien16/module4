@@ -16,8 +16,13 @@
     Create at: <p th:text="${blog.publishedDate}"></p>
   </div>
   <div>
-    <button>Delete</button>
-    <button>Update</button>
+    <a th:href="@{/blog/delete/{id}(id=${blog.id})}"
+       onclick="return confirm('Are you sure?')">
+      Delete
+    </a>
+    <a th:href="@{/blog/edit/{id}(id=${blog.id})}">
+      Edit
+    </a>
   </div>
 </div>
 </body>

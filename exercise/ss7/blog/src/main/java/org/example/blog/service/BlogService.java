@@ -17,17 +17,31 @@ public class BlogService implements IBlogService{
 
     @Override
     public Blog findById(Integer id) {
-        return blogRepository.findById(id).get();
+        return blogRepository.findById(id).orElse(null);
     }
 
     @Override
     public boolean update(Blog blog) {
-        return false;
+        if (false) {
+            return false;
+        }
+
+        if (!blogRepository.existsById(blog.getId())) {
+            return false;
+        }
+
+        blogRepository.save(blog);
+        return true;
     }
 
+
     @Override
-    public void deleteById(Integer id) {
-         blogRepository.deleteById(id);
+    public boolean deleteById(Integer id) {
+        if (!blogRepository.existsById(id)) {
+            return false;
+        }
+        blogRepository.deleteById(id);
+        return true;
     }
 
     @Override

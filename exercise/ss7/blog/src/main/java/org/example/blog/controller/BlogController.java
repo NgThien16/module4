@@ -44,4 +44,44 @@ public class BlogController {
         model.addAttribute("blogList",blogs);
         return "blog/detail";
     }
+    @GetMapping("/delete/{id}")
+    public String delete(@org.springframework.web.bind.annotation.PathVariable Integer id,
+                         RedirectAttributes redirectAttributes) {
+
+        boolean result = blogService.deleteById(id);
+        if (result) {
+            redirectAttributes.addFlashAttribute("mess", "Delete successfully");
+        } else {
+            redirectAttributes.addFlashAttribute("mess", "Blog not found");
+        }
+        return "redirect:/blog";
+    }
+    @GetMapping("/edit/{id}")
+    public String showEdit(@org.springframework.web.bind.annotation.PathVariable Integer id,
+                           Model model,
+                           RedirectAttributes redirectAttributes) {
+
+        Blog blog = blogService.findById(id);
+        if (blog == null) {
+            redirectAttributes.addFlashAttribute("mess", "Blog not found");
+            return "redirect:/blog";
+        }
+        model.addAttribute("blog", blog);
+        return "blog/edit";
+    }
+    @PostMapping("/update")
+    public String update(@ModelAttribute Blog blog,
+                         RedirectAttributes redirectAttributes) {
+
+        boolean result = blogService.update(blog);
+        if (result) {
+            redirectAttributes.addFlashAttribute("mess", "Update successfully");
+        } else {
+            redirectAttributes.addFlashAttribute("mess", "Update failed");
+        }
+        return "redirect:/blog";
+    }
+
+
+
 }
