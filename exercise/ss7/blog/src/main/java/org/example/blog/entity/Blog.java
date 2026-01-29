@@ -22,4 +22,7 @@ public class Blog {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate publishedDate;
+    @ManyToOne
+    @JoinColumn(name="category_id")
+    private Category category;
 }
