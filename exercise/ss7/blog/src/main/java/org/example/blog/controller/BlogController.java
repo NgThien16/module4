@@ -48,12 +48,19 @@ public class BlogController {
         redirectAttributes.addFlashAttribute("mess","add successfully");
         return "redirect:/blog";
     }
-    @GetMapping(value="/detail")
-    public String showDetail(Model model){
-        List<Blog> blogs = blogService.findAll();
-        model.addAttribute("blogList",blogs);
+    @GetMapping("/detail/{id}")
+    public String detail(@PathVariable Integer id, Model model) {
+
+        Blog blog = blogService.findById(id);
+
+        if (blog == null) {
+            return "redirect:/blog";
+        }
+
+        model.addAttribute("blog", blog);
         return "blog/detail";
     }
+
     @GetMapping("/delete/{id}")
     public String delete(@org.springframework.web.bind.annotation.PathVariable Integer id,
                          RedirectAttributes redirectAttributes) {
