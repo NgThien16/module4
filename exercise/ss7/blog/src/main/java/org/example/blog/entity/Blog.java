@@ -25,4 +25,9 @@ public class Blog {
     @ManyToOne
     @JoinColumn(name="category_id")
     private Category category;
+    @PrePersist
+    public void onCreate() {
+        publishedDate = LocalDate.now();
+    }
+
 }

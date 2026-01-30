@@ -7,15 +7,29 @@
     <link rel="stylesheet" th:href="@{/layout/style.css}">
 </head>
 <body>
-<h1>Blogs</h1>
-<a href="blog/add">Add New Blog</a>
-<div class="blog-card" th:each="blog : ${blogList}">
-    <div class="blog-content">
-        <h3 class="blog-title" th:text="${blog.title}"></h3>
-        <p class="blog-desc" th:text="${blog.content}"></p>
-        <a href="blog/detail">detail</a>
-    </div>
-</div>
+<h1>Category Management</h1>
+<a href="category/add">Add new category</a>
+<table>
+    <tr>
+        <th>No. </th>
+        <th>Name</th>
+        <th>Action</th>
+    </tr>
+    <tr th:each="category,status : ${categoryList}">
+        <td th:text="${status.count}"></td>
+        <td th:text="${category.name}"></td>
+        <td>
+            <a th:href="@{/category/delete/{id}(id=${category.id})}"
+               onclick="return confirm('Are you sure?')">
+                Delete
+            </a>
+            <a th:href="@{/category/edit/{id}(id=${category.id})}">
+                Edit
+            </a>
+        </td>
+    </tr>
+</table>
+
 <p class="success-msg" th:if="${mess}" th:text="${mess}"></p>
 </body>
 </html>

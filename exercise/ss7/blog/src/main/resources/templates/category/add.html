@@ -11,31 +11,17 @@
 <body>
 
 <div class="form-container">
-    <h2>Add New Blog</h2>
+    <h2>Add New Category</h2>
 
-    <form th:action="@{/blog/add}" th:object="${blog}" method="post">
-
-        <div class="form-group">
-            <label>Title</label>
-            <input type="text" th:field="*{title}" placeholder="Enter blog title">
-        </div>
+    <form th:action="@{/category/add}" th:object="${category}" method="post">
 
         <div class="form-group">
-            <label>Content</label>
-            <textarea th:field="*{content}" rows="6"
-                      placeholder="Enter blog content"></textarea>
-        </div>
-        <div class="form-group">
-            <label>Author</label>
-            <input type="text" th:field="*{author}" placeholder="Enter your name">
-        </div>
-        <div class="form-group">
-            <label>Published Date</label>
-            <input type="date" th:field="*{publishedDate}">
+            <label>Name</label>
+            <input type="text" th:field="*{name}" placeholder="Enter category name">
         </div>
         <div class="form-actions">
             <button type="submit" class="btn-save">Save</button>
-            <a th:href="@{/blog}" class="btn-cancel">Cancel</a>
+            <a th:href="@{/category}" class="btn-cancel">Cancel</a>
         </div>
 
     </form>

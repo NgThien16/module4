@@ -3,13 +3,15 @@ package org.example.blog.controller;
 import org.example.blog.entity.Blog;
 import org.example.blog.service.BlogService;
 import org.example.blog.service.IBlogService;
+import org.example.blog.service.ICategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -19,16 +21,24 @@ import java.util.List;
 public class BlogController {
     @Autowired
     private IBlogService blogService;
+    @Autowired
+    private ICategoryService categoryService;
     // show list blog
     @GetMapping(value="")
-    public String showList(Model model){
-        List<Blog> blogs = blogService.findAll();
-        model.addAttribute("blogList",blogs);
+    public String showList(@RequestParam(name="page", defaultValue="0") int page,
+                           @RequestParam(name = "searchTitle",defaultValue = "") String searchTitle
+                          , Model model){
+        Sort sort = Sort.by("publishedDate").descending();
+        Pageable pageable = PageRequest.of(page, 4, sort);
+        Page<Blog> blogPage = blogService.findAll(searchTitle, pageable);
+        model.addAttribute("blogPage", blogPage);
+        model.addAttribute("searchTitle", searchTitle);
         return "blog/list";
     }
     @GetMapping(value="/add")
     public String showAdd(Model model){
         model.addAttribute("blog",new Blog());
+        model.addAttribute("categories", categoryService.findAll());
         return "blog/add";
     }
     @PostMapping("/add")
@@ -67,6 +77,7 @@ public class BlogController {
             return "redirect:/blog";
         }
         model.addAttribute("blog", blog);
+        model.addAttribute("categories", categoryService.findAll());
         return "blog/edit";
     }
     @PostMapping("/update")
