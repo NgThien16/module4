@@ -1,0 +1,30 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Register</title>
+    <style>
+        .error { color: red; }
+        form { width: 400px; margin: 30px auto; }
+        input { width: 100%; margin-bottom: 10px; padding: 6px; }
+    </style>
+</head>
+<body>
+
+<h2 align="center">Thêm bài hát mới</h2>
+
+<form th:action="@{/add}" th:object="${song}" method="post">
+
+    <input th:field="*{name}" placeholder="Nhập tên bài hát">
+    <p th:errors="*{name}" class="error"></p>
+
+    <input th:field="*{artist}" placeholder="Nhập tên ca sĩ">
+    <p th:errors="*{artist}" class="error"></p>
+
+    <input th:field="*{genre}" placeholder="Nhập thể loại">
+    <p th:errors="*{genre}" class="error"></p>
+
+    <button type="submit">Add</button>
+</form>
+</body>
+</html>
