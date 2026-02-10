@@ -1,3 +1,4 @@
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
@@ -29,17 +30,18 @@
     <form class="row g-2 mb-4" th:action="@{/blog}" method="get">
         <div class="col-md-10">
             <input class="form-control"
+                   id="searchTitle"
                    name="searchTitle"
                    placeholder="Search by title..."
                    th:value="${searchTitle}">
         </div>
         <div class="col-md-2">
-            <button class="btn btn-primary w-100">Search</button>
+            <button type="button" class="btn btn-primary w-100">Search</button>
         </div>
     </form>
 
     <!-- Blog Cards -->
-    <div class="row">
+    <div class="row" id="blogList" th:fragment="blogList">
         <div class="col-md-4 mb-4" th:each="blog : ${blogPage.content}">
             <div class="card h-100 shadow-sm">
                 <div class="card-body d-flex flex-column">
@@ -59,30 +61,12 @@
     </div>
 
     <!-- Pagination -->
-    <nav class="d-flex justify-content-center mt-3">
-        <ul class="pagination">
-            <li class="page-item" th:classappend="${!blogPage.hasPrevious()} ? 'disabled'">
-                <a class="page-link"
-                   th:href="@{/blog(page=${blogPage.number - 1}, searchTitle=${searchTitle})}">
-                    Previous
-                </a>
-            </li>
+    <div class="text-center mt-3">
+        <button id="loadMore" class="btn btn-outline-primary">
+            ⬇ Load more
+        </button>
+    </div>
 
-            <li class="page-item disabled">
-                <span class="page-link">
-                    <span th:text="${blogPage.number + 1}"></span> /
-                    <span th:text="${blogPage.totalPages}"></span>
-                </span>
-            </li>
-
-            <li class="page-item" th:classappend="${!blogPage.hasNext()} ? 'disabled'">
-                <a class="page-link"
-                   th:href="@{/blog(page=${blogPage.number + 1}, searchTitle=${searchTitle})}">
-                    Next
-                </a>
-            </li>
-        </ul>
-    </nav>
 
     <!-- Message -->
     <div class="alert alert-success mt-3"
@@ -94,3 +78,44 @@
 
 </body>
 </html>
+<script>
+    $("#btnSearch").click(function () {
+        let searchTitle = $("#searchTitle").val();
+
+        $.ajax({
+            url: "/blog/search",
+            type: "GET",
+            data: {
+                searchTitle: searchTitle
+            },
+            success: function (data) {
+                $("#blogList").html(data);
+                page = 0; // reset page khi search
+            }
+        });
+    });
+</script>
+<script>
+    let page = 0;
+
+    $("#loadMore").click(function () {
+        page++;
+
+        $.ajax({
+            url: "/blog/load-more",
+            type: "GET",
+            data: {
+                page: page,
+                searchTitle: $("#searchTitle").val()
+            },
+            success: function (data) {
+                if (data.trim() === "") {
+                    $("#loadMore").hide();
+                } else {
+                    $("#blogList").append(data);
+                }
+            }
+        });
+    });
+</script>
+

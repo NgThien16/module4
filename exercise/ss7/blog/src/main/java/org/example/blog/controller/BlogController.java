@@ -99,7 +99,27 @@ public class BlogController {
         }
         return "redirect:/blog";
     }
+    @GetMapping("/search")
+    public String searchAjax(@RequestParam String searchTitle, Model model){
+        Pageable pageable = PageRequest.of(0, 4, Sort.by("publishedDate").descending());
+        Page<Blog> blogPage = blogService.findAll(searchTitle, pageable);
+        model.addAttribute("blogPage", blogPage);
+        return "blog/list :: blogList";
+    }
+    @GetMapping("/load-more")
+    public String loadMore(@RequestParam int page,
+                           @RequestParam String searchTitle,
+                           Model model){
 
+        Pageable pageable = PageRequest.of(page, 4, Sort.by("publishedDate").descending());
+        Page<Blog> blogPage = blogService.findAll(searchTitle, pageable);
 
+        if (blogPage.isEmpty()) {
+            return "";
+        }
+
+        model.addAttribute("blogPage", blogPage);
+        return "blog/list :: blogList";
+    }
 
 }
